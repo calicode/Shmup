@@ -6,26 +6,34 @@ public class EnemyController : MonoBehaviour
 {
 	public static int maxHealth = 10;
 	public static int currentHealth;
+	public GameObject laserEnemy;
+	public int shotCooldown;
 
 	// Use this for initialization
 	void Start ()
 	{
+		shotCooldown = Random.Range (60, 240);
 		currentHealth = maxHealth;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
+		if (shotCooldown > 0) {
+			shotCooldown--;
+		} else {
+			FireWeapon ();
+		}
 
 	}
 
 	void OnTriggerEnter2D (Collider2D trigger)
 	{
-		print ("collision happaned with" + trigger.gameObject.name); 
 		Laser laserHit = trigger.GetComponent <Laser> ();
 		if (laserHit) {
 
-			takeDamage (Laser.getDamage ());
+			takeDamage (laserHit.getDamage ());
+			laserHit.killMe ();
 
 		}
 	}
@@ -37,5 +45,16 @@ public class EnemyController : MonoBehaviour
 			Destroy (gameObject);
 		}
 
+	}
+
+
+
+	public void FireWeapon ()
+	{
+		GameObject thisLaser = Instantiate (laserEnemy, new Vector3 (transform.position.x, transform.position.y - 1f, 0), Quaternion.identity);
+		Rigidbody2D rb = thisLaser.GetComponent <Rigidbody2D> ();
+		rb.velocity = new Vector2 (0f, -5f);
+		shotCooldown = Random.Range (60, 240);
+	
 	}
 }

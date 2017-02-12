@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-	int baseDamage, maxDamage;
-	public static int currentDamage;
+	int baseDamage, maxDamage, currentDamage;
 	// Use this for initialization
 	void Start ()
 	{
@@ -22,14 +21,12 @@ public class Laser : MonoBehaviour
 
 	}
 
-	public static int getDamage ()
+	public int getDamage ()
 	{
-		int tempDamage = currentDamage;
-		killMe ();
-		return tempDamage;
+		return currentDamage;
 	}
 
-	void killMe ()
+	public void killMe ()
 	{
 		Destroy (gameObject);
 

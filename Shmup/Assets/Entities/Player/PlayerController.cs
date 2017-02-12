@@ -13,9 +13,17 @@ public class PlayerController : MonoBehaviour
 	public float shotSpeed = 5f;
 	int shotMaxCooldown = 15;
 	int shotCooldown = 0;
+	int maxHealth, currentHealth;
+	static int maxLives = 5;
+	static int currentLives = maxLives;
+
+
+
 	// Use this for initialization
 	void Start ()
 	{
+		maxHealth = 20;
+		currentHealth = maxHealth;
 		// setup for clamping player to screen bounds, determines bounds automatically. 
 	
 		float distance = transform.position.z - Camera.main.transform.position.z;	
@@ -27,10 +35,13 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+
+
 		hInput = Input.GetAxis ("Horizontal");
 		float hMovement = (hInput * playerSpeed) * Time.deltaTime;
 		transform.Translate (new Vector3 (hMovement, 0, 0));
 		transform.position = new Vector3 (Mathf.Clamp (transform.position.x, leftmost.x + padding, rightmost.x - padding), transform.position.y, 0);
+
 		if (shotCooldown > 0) {
 			shotCooldown--;
 		}
@@ -39,11 +50,6 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	public static void clampToScreen ()
-	{
-
-
-	}
 
 	public void FireWeapon ()
 	{
@@ -51,5 +57,42 @@ public class PlayerController : MonoBehaviour
 		Rigidbody2D rb = thisLaser.GetComponent <Rigidbody2D> ();
 		rb.velocity = new Vector2 (0f, shotSpeed);
 		shotCooldown = shotMaxCooldown;
+	}
+
+
+
+	public void TakeDamage (int damageAmount)
+	{
+		print ("player taking damage in amount of " + damageAmount + "curr health is" + currentHealth + "Curr lives are " + currentLives); 
+		
+		currentHealth -= damageAmount;
+		if (currentHealth <= 0) {
+			HandleDeath ();
+		}
+
+
+	}
+
+	void OnTriggerEnter2D (Collider2D trigger)
+	{
+		EnemyShot laserHit = trigger.GetComponent <EnemyShot> ();
+		if (laserHit) {
+
+			TakeDamage (laserHit.getDamage ());
+			laserHit.killMe ();
+
+		}
+	}
+
+	void HandleDeath ()
+	{
+		currentLives--;
+		if (currentLives > 0) {
+			Instantiate (gameObject);
+			Destroy (gameObject);
+		} else {
+			print ("Out of lives"); 
+			Destroy (gameObject);
+		}
 	}
 }
