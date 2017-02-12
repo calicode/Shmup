@@ -9,6 +9,10 @@ public class PlayerController : MonoBehaviour
 	Vector3 leftmost;
 	Vector3 rightmost;
 	public float padding = .5f;
+	public GameObject laser;
+	public float shotSpeed = 5f;
+	int shotMaxCooldown = 15;
+	int shotCooldown = 0;
 	// Use this for initialization
 	void Start ()
 	{
@@ -27,11 +31,25 @@ public class PlayerController : MonoBehaviour
 		float hMovement = (hInput * playerSpeed) * Time.deltaTime;
 		transform.Translate (new Vector3 (hMovement, 0, 0));
 		transform.position = new Vector3 (Mathf.Clamp (transform.position.x, leftmost.x + padding, rightmost.x - padding), transform.position.y, 0);
+		if (shotCooldown > 0) {
+			shotCooldown--;
+		}
+		if (Input.GetButton ("Fire1") && shotCooldown <= 0) {
+			FireWeapon ();
+		}
 	}
 
 	public static void clampToScreen ()
 	{
 
 
+	}
+
+	public void FireWeapon ()
+	{
+		GameObject thisLaser = Instantiate (laser, new Vector3 (transform.position.x, transform.position.y + 1f, 0), Quaternion.identity);
+		Rigidbody2D rb = thisLaser.GetComponent <Rigidbody2D> ();
+		rb.velocity = new Vector2 (0f, shotSpeed);
+		shotCooldown = shotMaxCooldown;
 	}
 }
