@@ -13,6 +13,7 @@ public class EnemySpawner : MonoBehaviour
 	public float padding;
 	public float formationSpeed = 5f;
 	public string moveDirection = "Left";
+	public float spawnDelay = 1.5f;
 
 	void Start ()
 	{
@@ -32,18 +33,22 @@ public class EnemySpawner : MonoBehaviour
 	void Update ()
 	{
 		moveEnemies ();
+		CheckIfAllEnemiesDead ();
 	}
 
 	public void spawnEnemiesAtSpawnPositions ()
 	{
 	
-		foreach (Transform child in transform) {
-			GameObject enemy = Instantiate (enemyPrefab, child.transform.position, Quaternion.identity) as GameObject;
-			enemy.transform.parent = child;
-	
+		Transform freePosition = NextFreeSpawnPosition ();
+		if (freePosition) {
+			GameObject enemy = Instantiate (enemyPrefab, freePosition.position, Quaternion.identity) as GameObject;
+			enemy.transform.parent = freePosition;
 		}
-	
 
+	
+		if (NextFreeSpawnPosition ()) {
+			Invoke ("spawnEnemiesAtSpawnPositions", spawnDelay);
+		}
 	}
 
 	public void moveEnemies ()
@@ -64,5 +69,30 @@ public class EnemySpawner : MonoBehaviour
 		}
 		
 
+	}
+
+	bool CheckIfAllEnemiesDead ()
+	{
+		foreach (Transform childPositionGameObject  in transform) {
+
+			if (childPositionGameObject.childCount > 0) {
+				return false;
+			}
+		}
+		spawnEnemiesAtSpawnPositions ();
+		return true;
+	}
+
+	Transform NextFreeSpawnPosition ()
+	{
+
+		foreach (Transform childPositionGameObject in transform) {
+			if (childPositionGameObject.childCount == 0) {
+				return childPositionGameObject;
+			}
+
+		}
+		print ("no free spawn positions hmm"); 
+		return null;
 	}
 }

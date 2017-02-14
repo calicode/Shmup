@@ -53,9 +53,19 @@ public class PlayerController : MonoBehaviour
 
 	public void FireWeapon ()
 	{
+		float spreadRandom = Random.value * 2;
 		GameObject thisLaser = Instantiate (laser, new Vector3 (transform.position.x, transform.position.y + 1f, 0), Quaternion.identity);
 		Rigidbody2D rb = thisLaser.GetComponent <Rigidbody2D> ();
 		rb.velocity = new Vector2 (0f, shotSpeed);
+
+		GameObject thisLaser2 = Instantiate (laser, new Vector3 (transform.position.x, transform.position.y + 1f, 0), Quaternion.identity);
+		Rigidbody2D rb2 = thisLaser2.GetComponent <Rigidbody2D> ();
+		rb2.velocity = new Vector2 (spreadRandom, shotSpeed);
+		GameObject thisLaser3 = Instantiate (laser, new Vector3 (transform.position.x, transform.position.y + 1f, 0), Quaternion.identity);
+		Rigidbody2D rb3 = thisLaser3.GetComponent <Rigidbody2D> ();
+		rb3.velocity = new Vector2 (-spreadRandom, shotSpeed);
+
+
 		shotCooldown = shotMaxCooldown;
 	}
 
