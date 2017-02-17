@@ -9,7 +9,7 @@ public class EnemyShot : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		baseDamage = 1;
+		baseDamage = 5;
 		maxDamage = 5;
 		currentDamage = baseDamage;
 	}

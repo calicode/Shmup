@@ -8,10 +8,11 @@ public class EnemyController : MonoBehaviour
 	public static int currentHealth;
 	public GameObject laserEnemy;
 	public int shotCooldown;
-
+	public ScoreKeeper scoreKeeper;
 	// Use this for initialization
 	void Start ()
 	{
+		scoreKeeper = GameObject.Find ("Score").GetComponent <ScoreKeeper> ();
 		shotCooldown = Random.Range (60, 240);
 		currentHealth = maxHealth;
 	}
@@ -43,6 +44,7 @@ public class EnemyController : MonoBehaviour
 		currentHealth -= damageAmount;
 		if (currentHealth <= 0) {
 			Destroy (gameObject);
+			scoreKeeper.Score (4);
 		}
 
 	}

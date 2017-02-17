@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,20 +18,21 @@ public class PlayerController : MonoBehaviour
 	static int maxLives = 5;
 	static int currentLives = maxLives;
 
-
-
 	// Use this for initialization
 	void Start ()
 	{
+
+
 		maxHealth = 20;
 		currentHealth = maxHealth;
 		// setup for clamping player to screen bounds, determines bounds automatically. 
-	
+		// i do not fully understand how this works yet. 	
 		float distance = transform.position.z - Camera.main.transform.position.z;	
 		leftmost = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, distance));	
 		rightmost = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, distance));
-		// i do not fully understand how this works yet. 
+	
 	}
+
 
 	// Update is called once per frame
 	void Update ()
@@ -102,7 +104,9 @@ public class PlayerController : MonoBehaviour
 			Destroy (gameObject);
 		} else {
 			print ("Out of lives"); 
+			GameObject.Find ("Score").GetComponent <ScoreKeeper> ().ResetScore ();
 			Destroy (gameObject);
+			LevelManager.ReloadCurrent ();
 		}
 	}
 }
