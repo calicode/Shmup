@@ -9,7 +9,23 @@ public class Jukebox : MonoBehaviour
 	public AudioClip playerDeath;
 	public AudioClip enemyShot;
 	public AudioClip enemyDeath;
+	public AudioSource bgMusic;
+	static Jukebox instance = null;
 
+	void Awake ()
+	{
+		if (instance != null) {
+			Destroy (gameObject);
+		} else {
+			instance = this;
+			GameObject.DontDestroyOnLoad (gameObject);
+		}
+
+		bgMusic = GetComponent <AudioSource> ();
+		bgMusic.Play ();
+		bgMusic.loop = true;
+
+	}
 
 
 
