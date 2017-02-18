@@ -9,9 +9,22 @@ public class EnemyController : MonoBehaviour
 	public GameObject laserEnemy;
 	public int shotCooldown;
 	public ScoreKeeper scoreKeeper;
+	AudioSource shotSoundClip;
+	public AudioSource deathClip;
+	AudioSource[] audioSources;
 	// Use this for initialization
 	void Start ()
 	{
+		
+		audioSources = GetComponents <AudioSource> ();
+		Debug.Log (audioSources [0].priority);
+		if (audioSources [0].priority > 128) {
+			deathClip = audioSources [0];
+			shotSoundClip = audioSources [1];
+		} else {
+			deathClip = audioSources [1];
+			shotSoundClip = audioSources [0];
+		}
 		scoreKeeper = GameObject.Find ("Score").GetComponent <ScoreKeeper> ();
 		shotCooldown = Random.Range (60, 240);
 		currentHealth = maxHealth;
@@ -43,12 +56,18 @@ public class EnemyController : MonoBehaviour
 	{
 		currentHealth -= damageAmount;
 		if (currentHealth <= 0) {
-			Destroy (gameObject);
+			deathClip.Play ();
+			print ("i should have played a sound but i didn't deahtclip priority is" + deathClip.priority); 
 			scoreKeeper.Score (4);
+			ohJustDie ();
 		}
 
 	}
 
+	void ohJustDie ()
+	{
+		Destroy (gameObject);
+	}
 
 
 	public void FireWeapon ()
@@ -56,7 +75,7 @@ public class EnemyController : MonoBehaviour
 		GameObject thisLaser = Instantiate (laserEnemy, new Vector3 (transform.position.x, transform.position.y - 1f, 0), Quaternion.identity);
 		Rigidbody2D rb = thisLaser.GetComponent <Rigidbody2D> ();
 		rb.velocity = new Vector2 (0f, -5f);
-		shotCooldown = Random.Range (60, 240);
-	
+		shotCooldown = Random.Range (60, 180);
+		shotSoundClip.Play ();
 	}
 }

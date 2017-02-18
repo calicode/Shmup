@@ -17,11 +17,11 @@ public class PlayerController : MonoBehaviour
 	int maxHealth, currentHealth;
 	static int maxLives = 5;
 	static int currentLives = maxLives;
-
+	AudioSource shotSound;
 	// Use this for initialization
 	void Start ()
 	{
-
+		shotSound = GetComponent<AudioSource> ();
 
 		maxHealth = 20;
 		currentHealth = maxHealth;
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
 		Rigidbody2D rb3 = thisLaser3.GetComponent <Rigidbody2D> ();
 		rb3.velocity = new Vector2 (-spreadRandom, shotSpeed);
 
-
+		shotSound.Play (); 
 		shotCooldown = shotMaxCooldown;
 	}
 
