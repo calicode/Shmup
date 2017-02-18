@@ -8,23 +8,12 @@ public class EnemyController : MonoBehaviour
 	public static int currentHealth;
 	public GameObject laserEnemy;
 	public int shotCooldown;
-	public ScoreKeeper scoreKeeper;
-	AudioSource shotSoundClip;
-	public AudioSource deathClip;
-	AudioSource[] audioSources;
+	ScoreKeeper scoreKeeper;
+	Jukebox jukebox;
 	// Use this for initialization
 	void Start ()
 	{
-		
-		audioSources = GetComponents <AudioSource> ();
-		Debug.Log (audioSources [0].priority);
-		if (audioSources [0].priority > 128) {
-			deathClip = audioSources [0];
-			shotSoundClip = audioSources [1];
-		} else {
-			deathClip = audioSources [1];
-			shotSoundClip = audioSources [0];
-		}
+		jukebox = GameObject.FindObjectOfType<Jukebox> ();
 		scoreKeeper = GameObject.Find ("Score").GetComponent <ScoreKeeper> ();
 		shotCooldown = Random.Range (60, 240);
 		currentHealth = maxHealth;
@@ -56,18 +45,12 @@ public class EnemyController : MonoBehaviour
 	{
 		currentHealth -= damageAmount;
 		if (currentHealth <= 0) {
-			deathClip.Play ();
-			print ("i should have played a sound but i didn't deahtclip priority is" + deathClip.priority); 
+			jukebox.PlayJukeboxTrack ("enemyDeath", transform.position);
 			scoreKeeper.Score (4);
-			ohJustDie ();
+			Destroy (gameObject);
 		}
-
 	}
 
-	void ohJustDie ()
-	{
-		Destroy (gameObject);
-	}
 
 
 	public void FireWeapon ()
@@ -76,6 +59,7 @@ public class EnemyController : MonoBehaviour
 		Rigidbody2D rb = thisLaser.GetComponent <Rigidbody2D> ();
 		rb.velocity = new Vector2 (0f, -5f);
 		shotCooldown = Random.Range (60, 180);
-		shotSoundClip.Play ();
+		jukebox.PlayJukeboxTrack ("enemyShot", transform.position);
+
 	}
 }

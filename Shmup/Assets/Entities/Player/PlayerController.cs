@@ -17,12 +17,13 @@ public class PlayerController : MonoBehaviour
 	int maxHealth, currentHealth;
 	static int maxLives = 5;
 	static int currentLives = maxLives;
-	AudioSource shotSound;
+	Jukebox jukebox;
+
+
 	// Use this for initialization
 	void Start ()
 	{
-		shotSound = GetComponent<AudioSource> ();
-
+		jukebox = GameObject.FindObjectOfType<Jukebox> ();
 		maxHealth = 20;
 		currentHealth = maxHealth;
 		// setup for clamping player to screen bounds, determines bounds automatically. 
@@ -67,7 +68,8 @@ public class PlayerController : MonoBehaviour
 		Rigidbody2D rb3 = thisLaser3.GetComponent <Rigidbody2D> ();
 		rb3.velocity = new Vector2 (-spreadRandom, shotSpeed);
 
-		shotSound.Play (); 
+		jukebox.PlayJukeboxTrack ("playerShot", transform.position);
+
 		shotCooldown = shotMaxCooldown;
 	}
 
@@ -99,6 +101,7 @@ public class PlayerController : MonoBehaviour
 	void HandleDeath ()
 	{
 		currentLives--;
+		jukebox.PlayJukeboxTrack ("playerDeath", transform.position);
 		if (currentLives > 0) {
 			Instantiate (gameObject);
 			Destroy (gameObject);
