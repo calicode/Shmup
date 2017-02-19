@@ -13,7 +13,7 @@ public class EnemySpawner : MonoBehaviour
 	public float padding;
 	public float formationSpeed = 5f;
 	public string moveDirection = "Left";
-	public float spawnDelay = 1.5f;
+	public float spawnDelay = .5f;
 
 	void Start ()
 	{

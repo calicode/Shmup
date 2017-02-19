@@ -55,9 +55,9 @@ public class EnemyController : MonoBehaviour
 
 	public void FireWeapon ()
 	{
-		GameObject thisLaser = Instantiate (laserEnemy, new Vector3 (transform.position.x, transform.position.y - 1f, 0), Quaternion.identity);
+		GameObject thisLaser = Instantiate (laserEnemy, new Vector3 (transform.position.x, transform.position.y - .2f, 0), Quaternion.identity);
 		Rigidbody2D rb = thisLaser.GetComponent <Rigidbody2D> ();
-		rb.velocity = new Vector2 (0f, -5f);
+		rb.velocity = new Vector2 (0f, (Random.value - 5f));
 		shotCooldown = Random.Range (60, 180);
 		jukebox.PlayJukeboxTrack ("enemyShot", transform.position);
 

@@ -31,7 +31,6 @@ public class Jukebox : MonoBehaviour
 
 	public void PlayJukeboxTrack (string clip, Vector3 location)
 	{
-		print ("got request to play at" + location);
 
 		switch (clip) {
 		case "playerShot":

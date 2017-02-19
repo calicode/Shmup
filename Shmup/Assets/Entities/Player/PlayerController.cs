@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 	int shotMaxCooldown = 15;
 	int shotCooldown = 0;
 	int maxHealth, currentHealth;
-	static int maxLives = 5;
+	static int maxLives = 2;
 	static int currentLives = maxLives;
 	Jukebox jukebox;
 
@@ -57,14 +57,14 @@ public class PlayerController : MonoBehaviour
 	public void FireWeapon ()
 	{
 		float spreadRandom = Random.value * 2;
-		GameObject thisLaser = Instantiate (laser, new Vector3 (transform.position.x, transform.position.y + 1f, 0), Quaternion.identity);
+		GameObject thisLaser = Instantiate (laser, new Vector3 (transform.position.x, transform.position.y + .4f, 0), Quaternion.identity);
 		Rigidbody2D rb = thisLaser.GetComponent <Rigidbody2D> ();
 		rb.velocity = new Vector2 (0f, shotSpeed);
 
-		GameObject thisLaser2 = Instantiate (laser, new Vector3 (transform.position.x, transform.position.y + 1f, 0), Quaternion.identity);
+		GameObject thisLaser2 = Instantiate (laser, new Vector3 (transform.position.x, transform.position.y + .4f, 0), Quaternion.identity);
 		Rigidbody2D rb2 = thisLaser2.GetComponent <Rigidbody2D> ();
 		rb2.velocity = new Vector2 (spreadRandom, shotSpeed);
-		GameObject thisLaser3 = Instantiate (laser, new Vector3 (transform.position.x, transform.position.y + 1f, 0), Quaternion.identity);
+		GameObject thisLaser3 = Instantiate (laser, new Vector3 (transform.position.x, transform.position.y + .4f, 0), Quaternion.identity);
 		Rigidbody2D rb3 = thisLaser3.GetComponent <Rigidbody2D> ();
 		rb3.velocity = new Vector2 (-spreadRandom, shotSpeed);
 
@@ -107,9 +107,8 @@ public class PlayerController : MonoBehaviour
 			Destroy (gameObject);
 		} else {
 			print ("Out of lives"); 
-			GameObject.Find ("Score").GetComponent <ScoreKeeper> ().ResetScore ();
 			Destroy (gameObject);
-			LevelManager.ReloadCurrent ();
+			LevelManager.LoadLevel ("Win Screen");
 		}
 	}
 }
